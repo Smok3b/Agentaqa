@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentqa"
+version = "0.1.0"
+description = "Autonomous QA for AI agents: tests any agent by behaving like its real users"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.0",
+    "httpx>=0.27",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[project.scripts]
+agentqa = "agentqa.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["agentqa*"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "SIM", "ISC", "RUF"]
+# E501: long prompt strings read better unwrapped.
+# UP042: str+Enum is the pydantic-friendly form; StrEnum changes str() semantics.
+ignore = ["E501", "UP042"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Domain models such as TestReport and TestCase are not test classes.
+python_classes = ["*Tests"]
